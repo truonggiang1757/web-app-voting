@@ -1,0 +1,38 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "nextjs-app",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "server": "nodemon dist/index.js",
+    "start-ts": "ts-node src/index.ts",
+    "server-ts": "nodemon --exec ts-node src/index.ts",
+    "watch": "tsc -w"
+  },
+  "author": "truonggiang1757",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/express-session": "^1.17.6",
+    "@types/node": "^18.14.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "apollo-server-core": "^3.11.1",
+    "apollo-server-express": "^3.11.1",
+    "argon2": "^0.30.3",
+    "class-validator": "^0.14.0",
+    "connect-mongo": "^4.6.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "graphql": "^15.3.0",
+    "mongoose": "6.9.0",
+    "pg": "^8.9.0",
+    "reflect-metadata": "^0.1.13",
+    "type-graphql": "^1.1.1",
+    "typeorm": "^0.3.12"
+  }
+}
