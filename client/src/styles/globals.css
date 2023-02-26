@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@700&display=swap');
+
+
+@layer components {
+  .icon {
+    @apply h-5 w-5;
+  }
+  .btn{
+    @apply bg-blue-500 text-white py-2 px-4 rounded inline-block mt-10 font-medium hover:bg-transparent hover:text-blue-400 border hover:border-blue-400;
+  }
+}
+
+@layer utilities {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .example::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .example {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
+}
+
+.hollow {
+  font-family: 'Roboto Slab', serif;
+  -webkit-text-fill-color: white;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #60a5fa;
+}
+
+.non-hollow {
+  font-family: 'Roboto Slab', serif;
+  -webkit-text-fill-color: #60a5fa;
+}
