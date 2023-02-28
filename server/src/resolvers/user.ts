@@ -1,5 +1,5 @@
 import { User } from '../entities/User'
-import { Arg, Ctx, Mutation, Resolver } from 'type-graphql'
+import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { UserMutationResponse } from '../types/UserMutationResponse'
 import { RegisterInput } from '../types/RegisterInput'
 import { LoginInput } from '../types/LoginInput'
@@ -10,14 +10,23 @@ const argon2 = require('argon2')
 
 @Resolver()
 export class UserResolver {
-    @Mutation(_return => UserMutationResponse, {nullable: true})
+    @Query(_returns => User, {nullable: true})
+    async me(
+        @Ctx() { req }: Context
+    ): Promise<User | undefined | null >{
+        if(!req.session.id) return null
+        const user = await User.findOneBy({id: req.session.userId})
+        return user
+    }
+
+    @Mutation(_return => UserMutationResponse)
     async register(
         @Arg('registerInput') registerInput: RegisterInput,
         @Ctx() {req}: Context
     ): Promise<UserMutationResponse> {
         const validateRegisterInputErrors = validateRegisterInput(registerInput)
         if(validateRegisterInputErrors !== null)
-        return {code: 400, success: false, ...validateRegisterInputErrors}
+            return {code: 400, success: false, ...validateRegisterInputErrors}
         try {
             const {username, email, password} = registerInput
             const existingUser = await User.findOne({ where: [{username}, {email}] })
@@ -33,8 +42,7 @@ export class UserResolver {
                 email
             })
 
-            await User.save(newUser)
-
+            await newUser.save()
             req.session.userId = newUser.id
 
             return {
@@ -42,19 +50,21 @@ export class UserResolver {
             }
         } catch(error) {
             console.log(error)
-            return {code: 500, success: false, message: `Internal server error ${error.message}`}
+            return {
+                code: 500, success: false, 
+                message: `Internal server error ${error.message}`
+            }
         }
     }
 
     @Mutation(_return => UserMutationResponse)
     async login(
-        @Arg('loginInput') LoginInput: LoginInput,
-        @Ctx() {req}: Context
+        @Arg('loginInput') { usernameOrEmail, password }: LoginInput,
+        @Ctx() { req }: Context
     ): Promise<UserMutationResponse> {
         try {
-            
-            const {usernameOrEmail, password} = LoginInput
             const existingUser = await User.findOne({where: [usernameOrEmail.includes('@') ? {email:usernameOrEmail} : {username: usernameOrEmail}]})
+            console.log(existingUser?.id)
             if(!existingUser)
             return {
                 code: 400,
@@ -72,7 +82,7 @@ export class UserResolver {
                 message: 'Wrong password',
                 errors:[{field: 'password', message: 'Wrong password'}]
             }
-            //Create session and return cookie
+            //Create session and return cookies
             req.session.userId = existingUser.id
 
 
@@ -84,7 +94,7 @@ export class UserResolver {
     }
 
     @Mutation(_return => Boolean)
-    async logout(@Ctx() {req, res}: Context): Promise<boolean> {
+    logout(@Ctx() {req, res}: Context): Promise<boolean> {
         return new Promise((resolve, _reject) => {
             res.clearCookie(COOKIE_NAME)
             req.session.destroy(error => {

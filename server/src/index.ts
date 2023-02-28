@@ -5,7 +5,6 @@ import { DataSource } from 'typeorm'
 import { User } from './entities/User'
 import { Post } from './entities/Post'
 import { ApolloServer } from 'apollo-server-express/dist/ApolloServer'
-import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
 import { Context } from './types/Context'
 import { buildSchema } from 'type-graphql'
@@ -14,7 +13,7 @@ import { UserResolver } from './resolvers/user'
 import MongoStore from 'connect-mongo'
 import session from 'express-session'
 import mongoose from 'mongoose'
-import { COOKIE_NAME } from './constants'
+import { COOKIE_NAME, __prod__ } from './constants'
 import { PostResolver } from './resolvers/post'
 import cors from 'cors'
 
@@ -42,7 +41,7 @@ const main = async () => {
 
     const app = express()
     app.use(cors({
-        origin: ['http://localhost:3000'],
+        origin: 'http://localhost:3000',
         credentials: true
     }))
 
@@ -53,14 +52,15 @@ const main = async () => {
 
     console.log('MongoDB connected')
 
+    app.set('trust proxy', 1)
     // Session
     app.use(session({
         name: COOKIE_NAME,
         store: MongoStore.create({ mongoUrl }),
         cookie: {
-            maxAge: 1000 * 60 * 60, //1 hour
+            maxAge: 1000 * 60, //1 minute
             httpOnly: true,  // JS front end cannot access the cookie
-            secure: true,//cookie only works in https
+            secure: __prod__,//cookie only works in https
             sameSite: 'lax', //protect against CSRF attack
         },
         secret: process.env.SESSION_SECRET_DEV_PROD as string,

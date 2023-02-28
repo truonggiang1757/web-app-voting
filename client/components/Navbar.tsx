@@ -2,6 +2,8 @@ import { Bars3Icon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import Image from 'next/image'
 import logo_white from '../assets/logo-white.png'
+import NextLink from "next/link";
+import Link from "next/link";
 
 const Navbar = () => {
     let [open, setOpen]=useState(false);
@@ -20,10 +22,13 @@ const Navbar = () => {
                 </div>
                 <ul className={`md:flex md:flex-row items-center md:pb-0 pb-12 bg-blue-400 z-10 md:static absolute w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 right-[-400px] ${open ? 'flex flex-col -z-1 top-20 opacity-100' : 'right-[-490px]'} md:opacity-100 opacity-0`}>
                     <li className="mx-4 my-6 md:my-0">
-                        <a href="" className="text-xl">About us</a>
+                        <Link href="/" className="text-xl">About us</Link>
                     </li>
                     <li className="mx-4 my-6 md:my-0">
-                    <a href="/login" className='text-xl border-2 border-white rounded-full px-5 py-2 font-semibold hover:bg-white hover:text-blue-400'>Sign in</a>
+                        <Link href="/register" className='text-xl border-2 border-white rounded-full px-5 py-2 font-semibold hover:bg-white hover:text-blue-400'>Register</Link>
+                    </li>
+                    <li className="mx-4 my-6 md:my-0">
+                        <Link href="/login" className='text-xl border-2 border-white rounded-full px-5 py-2 font-semibold hover:bg-white hover:text-blue-400'>Login</Link>
                     </li>
                 </ul>
             </nav>

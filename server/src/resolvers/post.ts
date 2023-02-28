@@ -1,20 +1,23 @@
-import { Arg, ID, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql'
+import { Arg, Ctx, ID, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql'
 import { CreatePostInput } from '../types/CreatePostInput'
 import { PostMutationResponse } from '../types/PostMutationResponse'
 import { Post } from '../entities/Post'
 import { UpdatePostInput } from '../types/UpdatePostInput'
 import { checkAuth } from '../middleware/checkAuth'
+import { Context } from 'src/types/Context'
 
 @Resolver()
 export class PostResolver {
     @Mutation(_return => PostMutationResponse)
-    @UseMiddleware(checkAuth)
-    async createPost(@Arg('createPostInput'){title,text}: CreatePostInput
+    // @UseMiddleware(checkAuth)
+    async createPost(
+        @Arg('createPostInput'){title,text}: CreatePostInput,
+        @Ctx() { req }: Context
     ): Promise<PostMutationResponse> {
         try {
             const newPost = Post.create({
                 title, 
-                text
+                text,
             })
     
             await newPost.save()
@@ -53,10 +56,11 @@ export class PostResolver {
     }
 
     @Mutation(_return => PostMutationResponse)
-    @UseMiddleware(checkAuth)
+    // @UseMiddleware(checkAuth)
     async updatePost(
-        @Arg('updatePostInput') {id, title, text}: UpdatePostInput)
-        : Promise<PostMutationResponse> {
+        @Arg('updatePostInput') {id, title, text}: UpdatePostInput,
+        @Ctx() { req }: Context
+        ): Promise<PostMutationResponse> {
             const existingPost = await Post.findOne({where: {id:id}})
             if(!existingPost)
             return {code: 400, success: false, message: 'Post not found'}
@@ -69,10 +73,12 @@ export class PostResolver {
     }
     
     @Mutation(_return => PostMutationResponse)
-    @UseMiddleware(checkAuth)
+    // @UseMiddleware(checkAuth)
     async deletePost(
         @Arg('id', _type => ID) id:number,
+        @Ctx() { req }: Context
     ): Promise<PostMutationResponse> {
+        console.log('REQUEST.SESSION', req.session)
         const existingPost = await Post.findOne({where: {id: id}})
         if(!existingPost)
         return {

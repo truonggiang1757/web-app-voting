@@ -4,7 +4,7 @@ import { Ctx, Query } from 'type-graphql/dist/decorators'
 
 @Resolver()
 export class HelloResolver {
-    @Query(_returns => String)
+    @Query(_return => String)
     hello(
         @Ctx() { req }: Context
     ) {

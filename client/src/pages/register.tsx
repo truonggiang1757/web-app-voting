@@ -1,39 +1,43 @@
-import { Formik, Form } from 'formik'
+import { Formik, Form, FormikHelpers } from 'formik'
 import { EnvelopeIcon, KeyIcon } from "@heroicons/react/20/solid"
 import InputField from '../../components/InputField'
 
-import { registerMutation } from '@/graphql-client/mutation'
-import { useMutation } from '@apollo/client'
+import { MeDocument, MeQuery, RegisterInput, useRegisterMutation } from '@/generated/graphql'
+import { mapFieldErrors } from '@/helpers/mapFieldErrors'
+import { useRouter } from 'next/router'
+import { useCheckAuth } from '@/utils/useCheckAuth'
 
 const Register = () => {
+    const router = useRouter()
+    useCheckAuth()
+    const initialValues: RegisterInput = { username: '', email: '', password: ''}
 
-    const initialValues: NewUserInput = { username: '', email: '', password: ''}
-    interface UserMutationResponse {
-        code: number
-        success: boolean
-        message: string
-        user: string
-        errors: string
-    }
-
-    interface NewUserInput {
-        username: string
-        email: string
-        password: string
-    }
-
-
-    const [registerUser, {data, error}] = useMutation<
-        {register: UserMutationResponse},
-        {registerInput: NewUserInput}
-    >(registerMutation)
-
-    const onRegisterSubmit = (values: NewUserInput) => {
-        registerUser({
+    const [registerUser, { loading: _registerUserLoading, data, error}] = useRegisterMutation()
+    const onRegisterSubmit = async (values: RegisterInput, {setErrors}: FormikHelpers<RegisterInput>) => {
+        const response = await registerUser({
             variables: {
                 registerInput: values
+            },
+            update(cache, {data}) {
+                console.log('DATA LOGIN', data)
+                // const meData = cache.readQuery({query: MeDocument})
+                // console.log('MeData', meData)
+
+                if(data?.register.success) {
+                    cache.writeQuery<MeQuery>({
+                        query: MeDocument,
+                        data: {me: data.register.user}
+                    })
+                }
             }
         })
+
+        if(response.data?.register.errors){
+            setErrors(mapFieldErrors(response.data.register.errors))
+        }
+        else if (response.data?.register.user) {
+            router.push('/')
+        }
     }
 
   return (

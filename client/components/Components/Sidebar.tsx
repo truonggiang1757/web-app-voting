@@ -1,24 +1,10 @@
-import { MeDocument, MeQuery, useLogoutMutation } from '@/generated/graphql'
 import { UserCircleIcon, DocumentIcon, Cog8ToothIcon, HomeIcon, WalletIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/20/solid'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import logo_blue from '../assets/logo-blue.png'
+import logo_white from '../assets/logo-white.png'
 
 const Sidebar = () => {
-    const [logout, {loading: useLogoutMutationLoading}] = useLogoutMutation()
-    const logoutUser = async() => {
-        await logout({
-            update(cache, {data}) {
-            if(data?.logout) {
-                cache.writeQuery<MeQuery>({
-                    query: MeDocument,
-                    data: {me: null}
-                 })
-                }
-            }
-        })
-        
-    }
     const { reload } = useRouter()
     return (
         <aside className="py-6 px-10 w-64 border-r border-gray-200 text-xl">
@@ -46,7 +32,9 @@ const Sidebar = () => {
                     <Cog8ToothIcon className='h-5 w-5' />
                     <span>Settings</span>
                 </button>
-                <button onClick={logoutUser} className="flex items-center w-full px-2 space-x-2 hover:bg-gray-200 hover:text-blue-400 rounded">
+                <button onClick={() => {
+            fetch('/api/auth/expire', { method: 'POST' }).then(() => reload())
+          }} className="flex items-center w-full px-2 space-x-2 hover:bg-gray-200 hover:text-blue-400 rounded">
                     <ArrowLeftOnRectangleIcon className='h-5 w-5' />
                     <span>Logout</span>
                 </button>
