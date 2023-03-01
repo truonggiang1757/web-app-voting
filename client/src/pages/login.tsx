@@ -1,11 +1,12 @@
 import { EnvelopeIcon, KeyIcon } from "@heroicons/react/20/solid"
 import { Form, Formik, FormikHelpers } from 'formik'
 import InputField from '../../components/InputField'
-
+import NextLink from "next/link"
 import { LoginInput, MeDocument, MeQuery, useLoginMutation } from '@/generated/graphql'
 import { mapFieldErrors } from '@/helpers/mapFieldErrors'
 import { useRouter } from 'next/router'
 import { useCheckAuth } from "@/utils/useCheckAuth"
+import Link from "next/link"
 
 const Login = () => {
     const router = useRouter()
@@ -70,6 +71,11 @@ const Login = () => {
                                     </Form>
                                 )}
                             </Formik>
+                            <div>
+                                <Link href='/forgot-password'>
+                                    Forgot password
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>
