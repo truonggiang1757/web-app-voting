@@ -1,4 +1,4 @@
-import { Arg, Ctx, ID, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql'
+import { Arg, Ctx, FieldResolver, ID, Mutation, Query, Resolver, Root, UseMiddleware } from 'type-graphql'
 import { CreatePostInput } from '../types/CreatePostInput'
 import { PostMutationResponse } from '../types/PostMutationResponse'
 import { Post } from '../entities/Post'
@@ -6,8 +6,13 @@ import { UpdatePostInput } from '../types/UpdatePostInput'
 import { checkAuth } from '../middleware/checkAuth'
 import { Context } from 'src/types/Context'
 
-@Resolver()
+@Resolver(_of => Post)
 export class PostResolver {
+    @FieldResolver(_return => String)
+    textSnippet(@Root() root: Post) {
+        return root.text.slice(0, 50) + "..."
+    }
+
     @Mutation(_return => PostMutationResponse)
     // @UseMiddleware(checkAuth)
     async createPost(

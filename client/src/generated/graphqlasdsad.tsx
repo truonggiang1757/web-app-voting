@@ -485,7 +485,7 @@ export const UserMutationResponseFragmentDoc = gql`
     ...fieldError
   }
 }
-    ${UserMutationStatusesFragmentDoc}
+${UserMutationStatusesFragmentDoc}
 ${UserInfoFragmentDoc}
 ${FieldErrorFragmentDoc}`;
 export const ChangePasswordDocument = gql`
@@ -498,7 +498,7 @@ export const ChangePasswordDocument = gql`
     ...userMutationResponse
   }
 }
-    ${UserMutationResponseFragmentDoc}`;
+${UserMutationResponseFragmentDoc}`;
 export type ChangePasswordMutationFn = Apollo.MutationFunction<ChangePasswordMutation, ChangePasswordMutationVariables>;
 
 /**

@@ -1,9 +1,9 @@
-import { ChangePasswordInput, useChangePasswordMutation } from '@/generated/graphqlasdsad'
+import { ChangePasswordInput, MeDocument, MeQuery, useChangePasswordMutation } from '@/generated/graphql'
 import { mapFieldErrors } from '@/helpers/mapFieldErrors'
 import { EnvelopeIcon } from '@heroicons/react/20/solid'
 import InputField from 'components/InputField'
 import { Form, Formik, FormikHelpers } from 'formik'
-import { useRouter } from 'next/router'
+import router, { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import Link from 'next/link'
 
@@ -19,6 +19,14 @@ const ChangePassword = () => {
                     userId: query.userId as string,
                     token: query.token as string,
                     changePasswordInput: values
+                },
+                update(cache, {data}) {
+                    if(data?.changePassword.success) {
+                        cache.writeQuery<MeQuery>({
+                            query: MeDocument,
+                            data: {me: data.changePassword.user}
+                        })
+                    }
                 }
             })  
             
@@ -28,10 +36,18 @@ const ChangePassword = () => {
                     setTokenError(fieldErrors. token)
                 }
                 setErrors(fieldErrors)
+            } else if (response.data?.changePassword.user) {
+                router.push('/')
             }
         }
     }
-  return (
+    if(!query.token || !query.userId)
+    return (
+        <div>
+            Invalid request
+        </div>
+    )
+    else return (
     <div className='flex flex-col items-center justify-center min-h-screen md:py-2 md:bg-gray-100 sm:bg-white'>
         <div className='flex flex-col items-center justify-center w-full flex-1 px-20 text-center'>
             <div className='bg-blue-400 rounded-2xl md:shadow-2xl lg:flex lg:w-2/3 xs:max-w-full sm:flex-row sm:px-0 max-w-4xl'>
@@ -54,8 +70,9 @@ const ChangePassword = () => {
                                                 <div className='text-red'>{tokenError}</div>
                                                 <div>
                                                     <Link href='/forgot-password'>Go back</Link>
-                                                </div>} 
+                                                </div>
                                             </div>   
+                                            }
                                         </div>
                                         <input type="submit" value="Change password" className='border-2 mt-3 border-white text-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-white hover:text-blue-400'/>
                                     </Form>

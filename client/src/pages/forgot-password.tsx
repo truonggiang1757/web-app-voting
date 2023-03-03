@@ -1,10 +1,12 @@
-import { ForgotPasswordInput, useForgotPasswordMutation } from '@/generated/graphqlasdsad'
+import { ForgotPasswordInput, useForgotPasswordMutation } from '@/generated/graphql'
+import { useCheckAuth } from '@/utils/useCheckAuth'
 import { EnvelopeIcon, KeyIcon } from '@heroicons/react/20/solid'
 import InputField from 'components/InputField'
 import { Form, Formik } from 'formik'
 import React from 'react'
 
 const ForgotPassword = () => {
+    const { data: authData, loading: authLoading} = useCheckAuth()
     const initialValues = {email: ''}
 
     const [forgotPassword, {loading, data}] = useForgotPasswordMutation()

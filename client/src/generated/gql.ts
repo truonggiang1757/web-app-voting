@@ -17,6 +17,8 @@ const documents = {
     "fragment mutationStatuses on UserMutationResponse {\n  code\n  success\n  message\n}": types.MutationStatusesFragmentDoc,
     "fragment userInfo on User {\n  id\n  username\n  email\n}": types.UserInfoFragmentDoc,
     "fragment userMutationResponse on UserMutationResponse {\n  ...mutationStatuses\n  user {\n    ...userInfo\n  }\n  errors {\n    ...fieldError\n  }\n}": types.UserMutationResponseFragmentDoc,
+    "mutation ChangePassword($userId: String!, $token: String!, $changePasswordInput: ChangePasswordInput!) {\n  changePassword(\n    userId: $userId\n    token: $token\n    changePasswordInput: $changePasswordInput\n  ) {\n    ...userMutationResponse\n  }\n}": types.ChangePasswordDocument,
+    "mutation ForgotPassword($forgotPasswordInput: ForgotPasswordInput!) {\n  forgotPassword(forgotPasswordInput: $forgotPasswordInput)\n}": types.ForgotPasswordDocument,
     "mutation Login($loginInput: LoginInput!) {\n  login(loginInput: $loginInput) {\n    ...userMutationResponse\n  }\n}": types.LoginDocument,
     "mutation Logout {\n  logout\n}": types.LogoutDocument,
     "mutation Register($registerInput: RegisterInput!) {\n  register(registerInput: $registerInput) {\n    ...userMutationResponse\n  }\n}": types.RegisterDocument,
@@ -54,6 +56,14 @@ export function graphql(source: "fragment userInfo on User {\n  id\n  username\n
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "fragment userMutationResponse on UserMutationResponse {\n  ...mutationStatuses\n  user {\n    ...userInfo\n  }\n  errors {\n    ...fieldError\n  }\n}"): (typeof documents)["fragment userMutationResponse on UserMutationResponse {\n  ...mutationStatuses\n  user {\n    ...userInfo\n  }\n  errors {\n    ...fieldError\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation ChangePassword($userId: String!, $token: String!, $changePasswordInput: ChangePasswordInput!) {\n  changePassword(\n    userId: $userId\n    token: $token\n    changePasswordInput: $changePasswordInput\n  ) {\n    ...userMutationResponse\n  }\n}"): (typeof documents)["mutation ChangePassword($userId: String!, $token: String!, $changePasswordInput: ChangePasswordInput!) {\n  changePassword(\n    userId: $userId\n    token: $token\n    changePasswordInput: $changePasswordInput\n  ) {\n    ...userMutationResponse\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation ForgotPassword($forgotPasswordInput: ForgotPasswordInput!) {\n  forgotPassword(forgotPasswordInput: $forgotPasswordInput)\n}"): (typeof documents)["mutation ForgotPassword($forgotPasswordInput: ForgotPasswordInput!) {\n  forgotPassword(forgotPasswordInput: $forgotPasswordInput)\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -68,22 +68,23 @@ const Center = () => {
                             className="w-40 aspect-[3/2] rounded-lg object-cover object-top border border-gray-200"
                         />
                         <div>
-                            <a href="#" className="text-lg font-semibold text-gray-700">
+                            <a href={`/post/${post.id}`} className="text-lg font-semibold text-gray-700">
                             {post.title}
                             </a>
-                            <div className="font-medium text-gray-400">Government Vote</div>
+                            <div className="font-medium text-gray-400">by u/username</div>
                         </div>
                         <td className="font-medium text-center">Feb 2nd 2023</td>
                         <td className="font-medium text-center">Mar 28th 2023</td>
                         <td className="text-center">
-                        <span className="font-medium">4.5</span>
-                        <span className="font-medium">/5</span>
+                            <span className="font-medium">4.5</span>
+                            <span className="font-medium">/5</span>
                         </td>
                         <td>
-                        <div className="flex gap-x-2 justify-center items-center">
-                            <p>Public</p>
-                        </div>
+                            <div className="flex gap-x-2 justify-center items-center">
+                                <p>Public</p>
+                            </div>
                         </td>
+                        <td className="font-medium text-center">{post.textSnippet}</td>
                     </td>
                 </tr>)}
             </tbody>
