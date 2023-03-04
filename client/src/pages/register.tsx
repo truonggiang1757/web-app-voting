@@ -10,7 +10,7 @@ import { useCheckAuth } from '@/utils/useCheckAuth'
 const Register = () => {
     const router = useRouter()
     useCheckAuth()
-    const initialValues: RegisterInput = { username: '', email: '', password: ''}
+    const initialValues: RegisterInput = { username: '', email: '', password: '', firstName: '', lastName: '', phoneNum: '', role: 'user'}
 
     const [registerUser, { loading: _registerUserLoading, data, error}] = useRegisterMutation()
     const onRegisterSubmit = async (values: RegisterInput, {setErrors}: FormikHelpers<RegisterInput>) => {
@@ -65,6 +65,18 @@ const Register = () => {
                                         <div className="bg-gray-200 w-64 p-2 flex items-center mb-3">
                                             <EnvelopeIcon className="text-gray-400 w-6" />
                                             <InputField name='email' placeholder="Email" label='Email' type='text'/>    
+                                        </div>
+                                        <div className="bg-gray-200 w-64 p-2 flex items-center mb-3">
+                                            <KeyIcon className="text-gray-400 w-6" />
+                                            <InputField name='firstName' placeholder="First Name" label='First Name' type='text'/>     
+                                        </div>
+                                        <div className="bg-gray-200 w-64 p-2 flex items-center mb-3">
+                                            <KeyIcon className="text-gray-400 w-6" />
+                                            <InputField name='lastName' placeholder="Last Name" label='Last Name' type='text'/>     
+                                        </div>
+                                        <div className="bg-gray-200 w-64 p-2 flex items-center mb-3">
+                                            <KeyIcon className="text-gray-400 w-6" />
+                                            <InputField name='phoneNum' placeholder="Phone Number" label='Phone Number' type='text'/>     
                                         </div>
                                         <div className="bg-gray-200 w-64 p-2 flex items-center mb-3">
                                             <KeyIcon className="text-gray-400 w-6" />

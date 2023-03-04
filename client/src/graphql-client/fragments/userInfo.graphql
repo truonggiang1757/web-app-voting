@@ -2,4 +2,8 @@ fragment userInfo on User {
     id
     username
     email
+    firstName
+    lastName
+    phoneNum
+    role
 }

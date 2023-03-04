@@ -33,7 +33,7 @@ export class UserResolver {
         if(validateRegisterInputErrors !== null)
             return {code: 400, success: false, ...validateRegisterInputErrors}
         try {
-            const {username, email, password} = registerInput
+            const {username, email, firstName, lastName, phoneNum, password, role} = registerInput
             const existingUser = await User.findOne({ where: [{username}, {email}] })
             if(existingUser){
                 return {code: 400, success: false, message:`Username or email already exist`, errors: [{field: existingUser.username === username ? 'username' : 'email', message: `${existingUser.username === username ? 'Username' : 'Email'} already taken`}]}
@@ -44,14 +44,18 @@ export class UserResolver {
             const newUser = User.create({
                 username,
                 password: hashedPassword,
-                email
+                email,
+                firstName,
+                lastName,
+                phoneNum,
+                role
             })
 
             await newUser.save()
             req.session.userId = newUser.id
 
             return {
-                code: 200, success: true, message: 'User registered succussfully', user: newUser
+                code: 200, success: true, message: 'User registered successfully', user: newUser
             }
         } catch(error) {
             console.log(error)

@@ -10,4 +10,16 @@ export class RegisterInput {
 
     @Field()
     password: string
+
+    @Field()
+    firstName: string
+
+    @Field()
+    lastName: string
+
+    @Field()
+    phoneNum: string
+
+    @Field()
+    role: string
 }
