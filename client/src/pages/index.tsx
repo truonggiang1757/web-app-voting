@@ -8,6 +8,9 @@ import Sidebar from 'components/Sidebar'
 import Center from 'components/Center'
 import Dashboard from 'components/Dashboard'
 import { addApolloState, initializeApollo } from "@/lib/apolloClient"
+import { GetStaticProps } from "next"
+
+export const limit = 3
 // import logo_blue from '../assets/logo-blue.png'
 
 
@@ -101,11 +104,14 @@ const Home = () => {
     )
 }
 
-export const getStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
     const apolloClient = initializeApollo()
 
   await apolloClient.query({
     query: PostsDocument,
+    variables: {
+        limit: 4
+    }
   })
 
   return addApolloState(apolloClient, {

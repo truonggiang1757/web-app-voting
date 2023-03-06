@@ -2,9 +2,15 @@ import Image from 'next/image'
 import logo_blue from '../assets/logo-blue.png'
 import { PostDocument, usePostsQuery } from "@/generated/graphql"
 import { addApolloState, initializeApollo } from "@/lib/apolloClient"
+import { NetworkStatus } from '@apollo/client'
+import Link from 'next/link'
+
+export const limit = 3
 
 const Center = () => {
-    const { data, loading } = usePostsQuery()
+    const { data, loading, error, fetchMore, networkStatus } = usePostsQuery({ variables: { limit }, notifyOnNetworkStatusChange: true })
+    const loadMorePosts = () => fetchMore({variables: {cursor: data?.posts?.cursor}})
+    const loadingMorePosts = networkStatus === NetworkStatus.fetchMore
     return (
         <main className="flex-1 pb-8">
             <div className="flex items-center justify-between py-7 px-10">
@@ -12,10 +18,11 @@ const Center = () => {
                     <h1 className="text-2xl font-semibold leading-relaxed text-gray-800">Welcome</h1>
                     <p className="text-sm font-medium text-gray-500">to your user dashboard</p>
                 </div>
-
-                <button className="inline-flex gap-x-2 items-center py-2.5 px-6 text-white bg-blue-600 rounded-xl hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1">
-                    <span className="text-sm font-semibold tracking-wide">Create vote</span>
-                </button>
+                <Link href='/create-ballot'>
+                    <button className="inline-flex gap-x-2 items-center py-2.5 px-6 text-white bg-blue-600 rounded-xl hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1">
+                        <span className="text-sm font-semibold tracking-wide">Create Ballot</span>
+                    </button>
+                </Link>
             </div>
             <div>
                 <ul className="flex grid grid-cols-5 gap-x-24 items-center px-4 border-y border-gray-200">
@@ -55,7 +62,7 @@ const Center = () => {
     {loading ? 'Loading...' :
         <table className="w-full border-b border-gray-200">
             <tbody>
-                {data?.posts.map(post => 
+                {data?.posts?.paginatedPosts.map(post => 
                 <tr className="hover:bg-gray-100 transition-colors group"> 
                     <td className="flex gap-x-4 items-center py-4 pl-10">
                         <input
@@ -68,10 +75,10 @@ const Center = () => {
                             className="w-40 aspect-[3/2] rounded-lg object-cover object-top border border-gray-200"
                         />
                         <div>
-                            <a href={`/post/${post.id}`} className="text-lg font-semibold text-gray-700">
+                            <a href={`/ballot/${post.id}`} className="text-lg font-semibold text-gray-700">
                             {post.title}
                             </a>
-                            <div className="font-medium text-gray-400">by u/username</div>
+                            <div className="font-medium text-gray-400">by u/{post.user.username}</div>
                         </div>
                         <td className="font-medium text-center">Feb 2nd 2023</td>
                         <td className="font-medium text-center">Mar 28th 2023</td>
@@ -100,12 +107,13 @@ const Center = () => {
                 <button className='flex items-center justify-center w-8 h-8 font-medium rounded-full'>3</button>
                 <button className='flex items-center justify-center w-8 h-8 font-medium rounded-full'>4</button>
                 <button className='flex items-center justify-center w-8 h-8 font-medium rounded-full'>5</button>
-                <button className="flex justify-center items-center w-8 h-8">
+                <button onClick={loadMorePosts} className="flex justify-center items-center w-8 h-8">
                 Next
                 </button>
             </div>
         </main>
     )
 }
+
 
 export default Center

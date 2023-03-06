@@ -1,5 +1,6 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 import { ObjectType, Field, ID } from 'type-graphql'
+import { Post } from "./Post";
 
 @ObjectType() //TypeScript -> GraphQL
 @Entity()// TypeScript -> PostgreSQL      
@@ -18,8 +19,27 @@ export class User extends BaseEntity {
     @Column({unique: true})
     email!: string
 
+    @Field()
+    @Column()
+    firstName!: string
+
+    @Field()
+    @Column()
+    lastName!: string
+
+    @Field()
+    @Column()
+    phoneNum!: string
+
+    @Field()
+    @Column()
+    role!: string
+
     @Column()
     password!: string
+
+    @OneToMany(() => Post, post => post.user)
+    posts: Post[]
 
     @Field()
     @CreateDateColumn()
