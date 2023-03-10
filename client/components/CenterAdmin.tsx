@@ -13,17 +13,24 @@ const Center = () => {
     const loadMorePosts = () => fetchMore({variables: {cursor: data?.posts?.cursor}})
     const loadingMorePosts = networkStatus === NetworkStatus.fetchMore
     return (
-        <main className="flex-1 pb-8 overflow-y-scroll">
+        <main className="flex-1 pb-8">
             <div className="flex items-center justify-between py-7 px-10">
                 <div>
                     <h1 className="text-2xl font-semibold leading-relaxed text-gray-800">Welcome</h1>
                     <p className="text-sm font-medium text-gray-500">to your user dashboard</p>
                 </div>
-                <Link href='/create-ballot'>
-                    <button className="inline-flex gap-x-2 items-center py-2.5 px-6 text-white bg-blue-600 rounded-xl hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1">
-                        <span className="text-sm font-semibold tracking-wide">Create Ballot</span>
-                    </button>
-                </Link>
+                <div className='flex items-center*--'>
+                    <Link href='/create-group'>
+                        <button className="inline-flex gap-x-2 items-center py-2.5 px-6 text-white bg-blue-600 rounded-xl hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1">
+                            <span className="text-sm font-semibold tracking-wide">Create Group</span>
+                        </button>
+                    </Link>
+                    <Link href='/create-ballot'>
+                        <button className="inline-flex gap-x-2 items-center py-2.5 px-6 text-white bg-blue-600 rounded-xl hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1">
+                            <span className="text-sm font-semibold tracking-wide">Create Ballot</span>
+                        </button>
+                    </Link>
+                </div>
             </div>
             <div>
                 <ul className="flex grid grid-cols-5 gap-x-24 items-center px-4 border-y border-gray-200">

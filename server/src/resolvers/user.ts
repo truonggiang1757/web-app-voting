@@ -24,8 +24,8 @@ export class UserResolver {
     async me(
         @Ctx() { req }: Context
     ): Promise<User | undefined | null >{
-        if(!req.session.id) return null
-        const user = await User.findOneBy({id: req.session.userId})
+        if(!req.session.userId) return null
+        const user = await User.findOne({where: {id: req.session.userId}})
         return user
     }
 
@@ -108,19 +108,19 @@ export class UserResolver {
     }
 
     @Mutation(_return => Boolean)
-    logout(@Ctx() {req, res}: Context): Promise<boolean> {
-        return new Promise((resolve, _reject) => {
-            res.clearCookie(COOKIE_NAME)
-            req.session.destroy(error => {
-                if(error) {
-                    console.log('DESTROYING SESSION ERROR', error)
-                    resolve(false)
-                }
-                resolve(true)
-            })
-        })
-    }
+	logout(@Ctx() { req, res }: Context): Promise<boolean> {
+		return new Promise((resolve, _reject) => {
+			res.clearCookie(COOKIE_NAME)
 
+			req.session.destroy(error => {
+				if (error) {
+					console.log('DESTROYING SESSION ERROR', error)
+					resolve(false)
+				}
+				resolve(true)
+			})
+		})
+	}
     @Mutation(_return => Boolean)
     async forgotPassword(@Arg('forgotPasswordInput') forgotPasswordInput: ForgotPasswordInput
     ): Promise<boolean>{

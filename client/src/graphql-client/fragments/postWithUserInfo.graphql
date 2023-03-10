@@ -4,8 +4,8 @@ fragment postWithUserInfo on Post {
     text
     createdAt
     updatedAt
-    textSnippet
     user {
+        id
         username
     }
 }

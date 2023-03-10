@@ -16,13 +16,15 @@ import mongoose from 'mongoose'
 import { COOKIE_NAME, __prod__ } from './constants'
 import { PostResolver } from './resolvers/post'
 import cors from 'cors'
+import { Group } from './entities/Group'
+import { GroupResolver } from './resolvers/group'
 
 export const myDataSource = new DataSource({
     type: 'postgres',
     host: "localhost",
     port: 5432,
     database: 'dApp',
-    entities: [User, Post],
+    entities: [User, Post, Group],
     username: process.env.DB_USERNAME_DEV,
     password: process.env.DB_PASSWORD_DEV,
     logging: true,
@@ -58,10 +60,10 @@ const main = async () => {
         name: COOKIE_NAME,
         store: MongoStore.create({ mongoUrl }),
         cookie: {
-            maxAge: 1000 * 60, //1 minute
+            maxAge: 1000 * 60 * 60, //1 minute
             httpOnly: true,  // JS front end cannot access the cookie
             secure: __prod__,//cookie only works in https
-            sameSite: 'lax', //protect against CSRF attack
+            sameSite: 'none', //protect against CSRF attack
         },
         secret: process.env.SESSION_SECRET_DEV_PROD as string,
         saveUninitialized: false, // don't save empty sessions, right from the start
@@ -70,7 +72,7 @@ const main = async () => {
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [HelloResolver, UserResolver, PostResolver],
+            resolvers: [HelloResolver, UserResolver, PostResolver, GroupResolver],
             validate: false
         }),
         context: ({ req, res }): Context => ({ req, res }),

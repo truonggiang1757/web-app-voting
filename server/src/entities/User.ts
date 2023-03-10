@@ -1,6 +1,7 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToMany } from "typeorm";
 import { ObjectType, Field, ID } from 'type-graphql'
 import { Post } from "./Post";
+import { Group } from "./Group";
 
 @ObjectType() //TypeScript -> GraphQL
 @Entity()// TypeScript -> PostgreSQL      
@@ -40,6 +41,9 @@ export class User extends BaseEntity {
 
     @OneToMany(() => Post, post => post.user)
     posts: Post[]
+
+    @ManyToMany(() => Group, group => group.users)
+    groups: Group[]
 
     @Field()
     @CreateDateColumn()

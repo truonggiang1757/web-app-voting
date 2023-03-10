@@ -1,7 +1,5 @@
-mutation CreatePost($CreatePostInput!){
-  createPost(createPostInput: $createPostInput {
-  	}
-  )
+mutation CreatePost($createPostInput: CreatePostInput!){
+  createPost(createPostInput: $createPostInput)
   {
     code
     success

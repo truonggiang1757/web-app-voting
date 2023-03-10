@@ -48,10 +48,10 @@ const Login = () => {
             <div className='bg-blue-400 rounded-2xl md:shadow-2xl lg:flex lg:w-2/3 xs:max-w-full sm:flex-row sm:px-0 max-w-4xl'>
                 <div className='w-full lg:p-5 sm:max-w-screen'>
                     <div className='py-10'>
-                        <h2 className='text-3xl font-bold text-white mb-2'>Sign up</h2>
+                        <h2 className='text-3xl font-bold text-white mb-2'>Login</h2>
                         <div className='border-2 w-10 border-white inline-block mb-2'></div>
                         <div className='flex justify-center my-2'></div>
-                        <p className="text-white mb-5">Enter your new credentials</p>
+                        <p className="text-white mb-5">Enter your credentials</p>
                         <div className="flex flex-col items-center">
                             {error && <p>Failed to Login. Internal server error</p>}
                             {data && data.login.success && <p>Registered successfully {JSON.stringify(data)}</p>}

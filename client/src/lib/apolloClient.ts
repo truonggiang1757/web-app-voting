@@ -38,21 +38,23 @@ function createApolloClient() {
       typePolicies: {
         Query: {
           fields: {
-            keyArgs: false,
-            merge(existing, incoming) {
-              console.log('Existing', existing)
-              console.log('Incoming', incoming)
+            posts: {
+              keyArgs: false,
+              merge(existing, incoming) {
+                console.log('Existing', existing)
+                console.log('Incoming', incoming)
 
-              let paginatedPosts: Post[] = []
-              if (incoming && existing.paginatedPosts) {
-                paginatedPosts = paginatedPosts.concat(existing.paginatedPosts)
-              }
+                let paginatedPosts: Post[] = []
+                if (existing && existing.paginatedPosts) {
+                  paginatedPosts = paginatedPosts.concat(existing.paginatedPosts)
+                }
 
-              if (incoming && incoming.paginatedPosts) {
-                paginatedPosts = paginatedPosts.concat(existing.paginatedPosts)
-              }
+                if (incoming && incoming.paginatedPosts) {
+                  paginatedPosts = paginatedPosts.concat(incoming.paginatedPosts)
+                }
 
-              return {...incoming, paginatedPosts}
+                return {...incoming, paginatedPosts}
+            }
             }
           },
         },

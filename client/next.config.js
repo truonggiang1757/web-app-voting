@@ -4,7 +4,7 @@ const nextConfig = {
   experiments: {
     asyncWebAssembly: true,
     importAsync: true
-  }
+  },
 }
 
 module.exports = nextConfig
